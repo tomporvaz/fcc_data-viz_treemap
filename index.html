@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <title>FCC Treemap</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <script>
+        //declare  variables
+        const w = 650;
+        const h = 650;
+        
+        
+        
+        
+        
+        d3.json("https://cdn.rawgit.com/freeCodeCamp/testable-projects-fcc/a80ce8f9/src/data/tree_map/kickstarter-funding-data.json")
+        .then(function(data){
+            const map = d3.select("figure").append("svg")
+            .attr("width", w)
+            .attr("height", h);
+            
+            
+            /* 
+            .on("mouseover", showTip)
+            .on("mousemove", d => moveTip(d))
+            .on("mouseout", hideTip);
+            
+            //tooltip declaration and functions copied and modifired from https://bl.ocks.org/mbostock/1087001
+            let tooltip = d3.select("body")
+            .append("div")
+            .attr("id", "tooltip")
+            .style("display", "none");
+            
+            function showTip() {
+                tooltip.style("display", "inline");
+            }
+            
+            function moveTip(data) {
+                const thisEduData = eduData.find(edData => edData.fips === data.id);
+                
+                tooltip.text(thisEduData.area_name + ", " + thisEduData.bachelorsOrHigher + "%")
+                .attr("data-education", thisEduData.bachelorsOrHigher)
+                .style("left", (d3.event.pageX + 5) + "px")
+                .style("top", (d3.event.pageY - 20) + "px");
+            }
+            
+            function hideTip() {
+                tooltip.style("display", "none");
+            };  */
+            
+            
+            //map description
+            map.append("desc")
+            .attr("id", "description")
+            .append("text")
+            .text("A treemap of kickstarter projects");
+            
+            /* 
+            //legend
+            const legend = map.append("svg")
+            .attr("height", 100)
+            .attr("width", 300)
+            .attr("x", 475)
+            .attr("y", 570)
+            .attr("transform", "translate(" + padding + ", 500)")
+            .attr("id", "legend"); 
+            
+            //create array for continuous legend
+            const arr1 = [];
+            let x = min;
+            for(let i = 0; i < 100; i++){
+                arr1.push(x);
+                x = x + 1;
+            }
+            
+            legend.selectAll("rect")
+            .data(arr1)
+            .enter()
+            .append("rect")
+            .attr("x", (d, i) => ((i * 3)))
+            .attr("y", 15)
+            .attr("width", 3)
+            .attr("height", 50)
+            .attr("fill", d => color(d));
+            
+            legend.append("text")
+            .attr("x", 5)
+            .attr("y", 45)
+            .attr("fill", "white")
+            .text(min);
+            
+            legend.append("text")
+            .attr("x", 260)
+            .attr("y", 45)
+            .attr("fill", "black")
+            .text(max);
+            
+            legend.append("text")
+            .text("% Education above Bachelors")
+            .attr("x", 40)
+            .attr("y", 12);  */
+            
+            //test output
+            console.log("Raw JSON data: " + JSON.stringify(data));
+            
+        });
+    </script>
+    
+    <h1 id="title">Treemap</h1>
+    <h2 id="subtitle">Kickstarter Projects Ranked by Value</h2>
+    <figure></figure>
+    
+    <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+</body>
+</html>
