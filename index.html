@@ -24,6 +24,34 @@
             .attr("width", w)
             .attr("height", h);
             
+            console.log("hello?");
+            
+            const hierarchy = d3.hierarchy(data)
+            .sum(d => d.value)
+            .sort((a, b) => b.value - a.value)
+            ;
+            
+            //console.log((hierarchy));
+            
+            //const treemap = d3.treemap();
+            
+            const treemap = d3.treemap()
+            .size([w, h])
+            .padding(1);
+            
+            const leaf = map.selectAll("g")
+            .data(treemap(hierarchy).leaves())
+            .join("g")
+            .attr("transform", d => `translate(${d.x0},${d.y0})`);
+            
+            console.log(treemap(hierarchy).leaves());
+            
+            leaf.append("rect")
+            //.attr("id", d => (d.leafUid = DOM.uid("leaf")).id)
+            //.attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
+            //.attr("fill-opacity", 0.6)
+            .attr("width", d => d.x1 - d.x0)
+            .attr("height", d => d.y1 - d.y0);
             
             /* 
             .on("mouseover", showTip)
