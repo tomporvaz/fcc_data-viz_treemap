@@ -17,8 +17,15 @@ body{
     pointer-events: none;
   }
 
-.county:hover{
+.tile:hover{
     fill: #F1DD1D;
     border: 3px solid white ;
 }
 
+.tileText{
+    font: 10px sans-serif;
+}
+
+#legend{
+    font: 12px sans-serif;
+}

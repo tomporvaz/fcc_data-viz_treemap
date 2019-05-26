@@ -20,21 +20,22 @@
         
         d3.json("https://cdn.rawgit.com/freeCodeCamp/testable-projects-fcc/a80ce8f9/src/data/tree_map/kickstarter-funding-data.json")
         .then(function(data){
+            const legend = d3.select("figure").append("svg")
+            .attr("width", 1200)
+            .attr("height", h/8)
+            .attr("id", "legend")
+            ;
+
             const map = d3.select("figure").append("svg")
             .attr("width", w)
             .attr("height", h);
-            
-            console.log("hello?");
-            
+                      
             const hierarchy = d3.hierarchy(data)
             .sum(d => d.value)
-            .sort((a, b) => b.value - a.value)
-            ;
+            .sort((a, b) => b.value - a.value);
             
-            //console.log((hierarchy));
-            
-            //const treemap = d3.treemap();
-            
+            const color = d3.scaleOrdinal(d3.schemeCategory10);
+   
             const treemap = d3.treemap()
             .size([w, h])
             .padding(1);
@@ -43,20 +44,33 @@
             .data(treemap(hierarchy).leaves())
             .join("g")
             .attr("transform", d => `translate(${d.x0},${d.y0})`);
+
+            const format = d3.format(",d");
             
             console.log(treemap(hierarchy).leaves());
             
             leaf.append("rect")
-            //.attr("id", d => (d.leafUid = DOM.uid("leaf")).id)
-            //.attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
-            //.attr("fill-opacity", 0.6)
+            .attr("fill", d => color(d.data.category))
             .attr("width", d => d.x1 - d.x0)
-            .attr("height", d => d.y1 - d.y0);
-            
-            /* 
+            .attr("height", d => d.y1 - d.y0)
+            .attr("class", "tile")
+            .attr("data-name", d => d.data.name)
+            .attr("data-category", d => d.data.category)
+            .attr("data-value", d => d.data.value)
             .on("mouseover", showTip)
             .on("mousemove", d => moveTip(d))
-            .on("mouseout", hideTip);
+            .on("mouseout", hideTip); 
+            ;
+            
+            leaf.append("text")
+            .text(d => d.data.name)
+            .attr("class", "tileText")
+            .attr("fill", "black")
+            .attr("x", 3)
+            .attr("y", 10);
+            
+            
+            
             
             //tooltip declaration and functions copied and modifired from https://bl.ocks.org/mbostock/1087001
             let tooltip = d3.select("body")
@@ -69,17 +83,18 @@
             }
             
             function moveTip(data) {
-                const thisEduData = eduData.find(edData => edData.fips === data.id);
-                
-                tooltip.text(thisEduData.area_name + ", " + thisEduData.bachelorsOrHigher + "%")
-                .attr("data-education", thisEduData.bachelorsOrHigher)
+                          
+                tooltip.text(`Name:  ${data.data.name}\n VALUE: $${format(data.data.value)} Category: ${data.data.category}`)
+                .attr("data-value", data.data.value)
                 .style("left", (d3.event.pageX + 5) + "px")
                 .style("top", (d3.event.pageY - 20) + "px");
             }
             
             function hideTip() {
                 tooltip.style("display", "none");
-            };  */
+            };  
+
+
             
             
             //map description
@@ -97,26 +112,43 @@
             .attr("y", 570)
             .attr("transform", "translate(" + padding + ", 500)")
             .attr("id", "legend"); 
-            
-            //create array for continuous legend
-            const arr1 = [];
-            let x = min;
-            for(let i = 0; i < 100; i++){
-                arr1.push(x);
-                x = x + 1;
-            }
-            
+            */
+
+            const categories = [
+                "Product Design",
+                "Tabletop Games",
+                "Video Games",
+                "Technology",
+                "Hardware",
+                "Sound",
+                "Gaming Hardware",
+                "Narrative Film",
+                "3D Printing",
+                "Television",
+                "Food",
+                "Games"
+                ]
+
             legend.selectAll("rect")
-            .data(arr1)
+            .data(categories)
             .enter()
             .append("rect")
-            .attr("x", (d, i) => ((i * 3)))
-            .attr("y", 15)
-            .attr("width", 3)
-            .attr("height", 50)
-            .attr("fill", d => color(d));
+            .attr("x", (d, i) => ((i * 120)))
+            .attr("y", 10)
+            .attr("width", 10)
+            .attr("height", 10)
+            .attr("fill", d => color(d))
+            .attr("class", "legend-item");
+
+            legend.selectAll("text")
+            .data(categories)
+            .enter()
+            .append("text")
+            .attr("x", (d, i) => ((i * 120) + 12))
+            .attr("y", 20)
+            .text(d => d);
             
-            legend.append("text")
+           /*  legend.append("text")
             .attr("x", 5)
             .attr("y", 45)
             .attr("fill", "white")
@@ -131,8 +163,8 @@
             legend.append("text")
             .text("% Education above Bachelors")
             .attr("x", 40)
-            .attr("y", 12);  */
-            
+            .attr("y", 12); 
+             */
             //test output
             console.log("Raw JSON data: " + JSON.stringify(data));
             
@@ -141,6 +173,7 @@
     
     <h1 id="title">Treemap</h1>
     <h2 id="subtitle">Kickstarter Projects Ranked by Value</h2>
+    
     <figure></figure>
     
     <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
